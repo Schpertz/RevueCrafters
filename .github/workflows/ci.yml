@@ -1,35 +1,26 @@
-name: CI
+name: .NET
 
 on:
   push:
     branches: [ "main" ]
-
-env:
-  DOTNET_VERSION: "8.0.x"
-  # If you want to run tests that need creds on CI, set these in repo Settings → Secrets and variables → Actions
-  # REVUE_EMAIL and REVUE_PASSWORD are read by your tests.
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  build-and-test:
+  build:
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-
-      - name: Restore
-        run: dotnet restore
-
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
-
-      - name: Test
-        env:
-          REVUE_EMAIL: ${{ secrets.REVUE_EMAIL }}
-          REVUE_PASSWORD: ${{ secrets.REVUE_PASSWORD }}
-        run: dotnet test --configuration Release --no-build --verbosity normal
+    - name: Checkout the repo
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore the packages
+      run: dotnet restore
+    - name: Build the solution
+      run: dotnet build --no-restore
+    - name: Run all tests
+      run: dotnet test --no-build --verbosity normal
