@@ -21,13 +21,13 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Restore packages
-        run: dotnet restore
+        run: dotnet restore ./RevueCrafters/RevueCrafters.csproj
 
       - name: Build solution
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build ./RevueCrafters/RevueCrafters.csproj --configuration Release --no-restore
 
       - name: Run tests
         env:
           REVUE_EMAIL: ${{ secrets.REVUE_EMAIL }}
           REVUE_PASSWORD: ${{ secrets.REVUE_PASSWORD }}
-        run: dotnet test --configuration Release --no-build --verbosity normal
+        run: dotnet test ./RevueCrafters/RevueCrafters.csproj --configuration Release --no-build --verbosity normal
